@@ -46,6 +46,14 @@ jobs:
           ls "$ANDROID_HOME/build-tools" || echo "NO build-tools"
           ls "$ANDROID_HOME/cmdline-tools" || echo "NO cmdline-tools"
 
+      - name: Provide build-tools matching Godot's default target SDK (34)
+        run: |
+          if [ ! -d "$ANDROID_HOME/build-tools/34.0.0" ]; then
+            (yes | sdkmanager --licenses >/dev/null 2>&1; sdkmanager "build-tools;34.0.0") \
+              || ln -s "$ANDROID_HOME/build-tools/33.0.2" "$ANDROID_HOME/build-tools/34.0.0"
+          fi
+          ls "$ANDROID_HOME/build-tools"
+
       - name: Create debug keystore
         run: |
           keytool -genkeypair -v -keystore /tmp/debug.keystore -alias androiddebugkey \
