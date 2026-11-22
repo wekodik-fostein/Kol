@@ -18,6 +18,13 @@ jobs:
           TPL=$(find / -type d -path "*export_templates/4.3.stable" 2>/dev/null | head -1)
           echo "Export templates found at: ${TPL:-NOT FOUND}"
           test -n "$TPL"
+          echo "Template dir contents:"; ls -la "$TPL" | head -40
+          for t in android_debug.apk android_release.apk; do
+            if [ ! -f "$TPL/$t" ]; then
+              echo "MISSING $t -> using android_debug.apk as stand-in"
+              cp "$TPL/android_debug.apk" "$TPL/$t" || echo "copy failed"
+            fi
+          done
           mkdir -p "$HOME/.local/share/godot/export_templates"
           ln -sfn "$TPL" "$HOME/.local/share/godot/export_templates/4.3.stable"
           JDK=$(dirname "$(dirname "$(readlink -f "$(which javac)")")")
