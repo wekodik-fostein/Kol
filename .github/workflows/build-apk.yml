@@ -54,6 +54,12 @@ jobs:
           fi
           ls "$ANDROID_HOME/build-tools"
 
+      - name: Install Android platform 34 for the Gradle build
+        run: |
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager "platforms;android-34" "build-tools;34.0.0" | tail -2
+          ls "$ANDROID_HOME/platforms"
+
       - name: Create debug keystore
         run: |
           keytool -genkeypair -v -keystore /tmp/debug.keystore -alias androiddebugkey \
