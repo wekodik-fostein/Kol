@@ -69,6 +69,12 @@ jobs:
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=/tmp/debug.keystore" >> "$GITHUB_ENV"
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
+          # Godot validates the debug keystore from editor settings; env vars alone aren't enough
+          cat >> "$HOME/.config/godot/editor_settings-4.3.tres" <<KS
+          export/android/debug_keystore = "/tmp/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          KS
 
       - name: Install Android build template into the project
         run: |
