@@ -31,6 +31,14 @@ jobs:
           TRES
           cat "$HOME/.config/godot/editor_settings-4.3.tres"
 
+      - name: Diagnose Android SDK layout
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls -la "$ANDROID_HOME" || true
+          ls "$ANDROID_HOME/platform-tools" || echo "NO platform-tools"
+          ls "$ANDROID_HOME/build-tools" || echo "NO build-tools"
+          ls "$ANDROID_HOME/cmdline-tools" || echo "NO cmdline-tools"
+
       - name: Create debug keystore
         run: |
           keytool -genkeypair -v -keystore /tmp/debug.keystore -alias androiddebugkey \
@@ -47,7 +55,7 @@ jobs:
       - name: Export debug APK
         run: |
           mkdir -p build
-          godot --headless --export-debug "Android" build/Kol-debug.apk
+          godot --headless --verbose --export-debug "Android" build/Kol-debug.apk
           ls -la build
 
       - uses: actions/upload-artifact@v4
