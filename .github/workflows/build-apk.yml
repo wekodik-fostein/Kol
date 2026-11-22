@@ -70,6 +70,14 @@ jobs:
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
 
+      - name: Install Android build template into the project
+        run: |
+          TPL=$(find / -type d -path "*export_templates/4.3.stable" 2>/dev/null | head -1)
+          mkdir -p android/build
+          unzip -q "$TPL/android_source.zip" -d android/build
+          echo "4.3.stable" > android/.build_version
+          ls -la android/build | head -20
+
       - name: Import assets
         run: godot --headless --import
 
