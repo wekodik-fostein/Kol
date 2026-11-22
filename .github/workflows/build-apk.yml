@@ -58,14 +58,6 @@ jobs:
           godot --headless --verbose --export-debug "Android" build/Kol-debug.apk
           ls -la build
 
-      - name: Sign APK with debug key
-        run: |
-          APKSIGNER=$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner | tail -1)
-          echo "Using $APKSIGNER"
-          "$APKSIGNER" sign --ks /tmp/debug.keystore --ks-key-alias androiddebugkey \
-            --ks-pass pass:android --key-pass pass:android build/Kol-debug.apk
-          "$APKSIGNER" verify --verbose build/Kol-debug.apk
-
       - uses: actions/upload-artifact@v4
         with:
           name: Kol-debug-apk
